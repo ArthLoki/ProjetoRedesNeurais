@@ -1,4 +1,5 @@
-from auxiliary_func.getPath import get_base_path
+from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
+from ProjetoRedesNeurais.auxiliary_func.getTimer import timer_data
 import numpy as np
 import torch
 import csv
@@ -13,7 +14,7 @@ def importCSVData(csv_path):
     csv_data_numpy = np.loadtxt(
         csv_path,
         dtype=np.float32,
-        delimiter=',',
+        delimiter=';',
         skiprows=1
     )
     return torch.from_numpy(csv_data_numpy)  # Returns a PyTorch Tensor
@@ -22,7 +23,7 @@ def importCSVData(csv_path):
 def getImageIdentifierColumnList():
     global data_path
 
-    data_dir = f'{data_path}/Images/'
+    data_dir = f'{data_path}/Images/T1'
     imageIdentifierColumnList = [name for name in os.listdir(data_dir) if os.path.splitext(name)[-1] == '.jpg']
 
     return imageIdentifierColumnList
@@ -44,10 +45,18 @@ def getOgColumnList():
     # 3 - return ogColumnList
     return ogColumnList
 
+
 def main():
     global data_path
-    csv_img_path = f'{data_path}/filename.csv'
+    filename = 'output.csv'
+    csv_img_path = f'{base_path}/T1/{filename}'
 
     # import csv data to a pytorch tensor
+    # img_data = importCSVData(f'C:/Users/lubjc/PycharmProjects/DeepLearning/ProjetoRedesNeurais/T1/{filename}')
     img_data = importCSVData(csv_img_path)
+    print(img_data.shape)
+
+
+if __name__ == '__main__':
+    main()
 
