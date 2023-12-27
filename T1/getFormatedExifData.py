@@ -1,5 +1,4 @@
 from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
-# from ProjetoRedesNeurais.auxiliary_func.getIndexes import getDateIndexes, findIndexFilePath
 import os
 
 # Global variables
