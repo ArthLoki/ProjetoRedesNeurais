@@ -39,6 +39,7 @@ def importCSVData():
 def main():
     filename = 'output.csv'
 
+    # generate csv file from exif data/raw data. it still need to be changed later
     generateExifDataset()
 
     # import csv data to a pytorch tensor
@@ -47,5 +48,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    timer_data(main)
 

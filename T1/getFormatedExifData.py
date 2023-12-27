@@ -1,3 +1,4 @@
+import string
 from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
 import os
 
@@ -14,7 +15,13 @@ filenames = [name for name in os.listdir(data_path) if os.path.splitext(name)[-1
 csv_filename = 'output.csv'
 csv_total_path = f'{csv_path}/{csv_filename}'
 
+# 3 - aux variables
+global alphabet, str_data_indexes
+alphabet = [letter for letter in string.ascii_letters+string.punctuation.replace('.', '')+' ']
+str_data_indexes = []
 
+
+# Funções
 def getSpecificIndexes(input):
     file = openTXT(data_path, filenames[0])
     header = createContentList(file, 0)
@@ -26,15 +33,26 @@ def getSpecificIndexes(input):
     return indexes
 
 
-def getMultSpecificIndexes(lInput):
+def getSpecificIndexesFromContent(input, content):
     indexes = []
-    for input in lInput:
-        indexes.append(i for i in getSpecificIndexes(input) if i not in indexes)
+    for i, data in enumerate(content):
+        if input in data:
+            indexes.append(i)
     return indexes
 
 
-def getDateIndexes():
-    dateIndexes = getSpecificIndexes('Date')
+def getMultSpecificIndexes(lInput, content):
+    indexes = []
+    for input in lInput:
+        aux = getSpecificIndexesFromContent(input, content)
+        for index in aux:
+            if index not in indexes:
+                indexes.append(index)
+    return indexes
+
+
+def getDateIndexes(content):
+    dateIndexes = getMultSpecificIndexes(['DateTime', ':'], content)
     return dateIndexes
 
 
@@ -43,9 +61,20 @@ def findIndexFilePath():
     return FilePathIndex[0]
 
 
+def findStrIndexes(content):
+    strIndexes = sorted(getMultSpecificIndexes(alphabet, content))
+
+    dateIndexes = getDateIndexes(content)
+    for i in dateIndexes:
+        if i in strIndexes:
+            strIndexes.remove(i)
+
+    return strIndexes
+
+
 def openTXT(path, filename):
     file_path = f'{path}/{filename}.txt'
-    file = open(file_path, 'rb')
+    file = open(file_path, 'r')
 
     return file
 
@@ -68,16 +97,13 @@ def processingData(content, escolha_tratamento):
 
 def writeCSV(content, modo, is_header=False):
     file = open(csv_total_path, modo)
-
-    content = processingData(content, 1)
-
-    # if is_header:
-    #     content = processingData(content, 2)
-
     if type(content) == list:
         file.write(content[0])
         for c in content[1:]:
-            file.write(f';{c}')
+            if c == '<undefined>':
+                file.write(f';{0}')
+            else:
+                file.write(f';{c}')
         file.write('\n')
     file.close()
     return
@@ -85,7 +111,8 @@ def writeCSV(content, modo, is_header=False):
 def getHeaderList():
     file = openTXT(data_path, filenames[0])
     header = createContentList(file, 0)
-    # file.close()
+    header = processingData(header, 1)
+    file.close()
     return header
 
 
@@ -114,25 +141,25 @@ def createContentList(file, content_type):
 def getContentList(filename):
     file = openTXT(data_path, filename)
     content = createContentList(file, 1)
-    # file.close()
+    content = processingData(content, 1)
+    file.close()
     return content
 
-
+# Main
 def generateExifDataset():
-    findIndexFilePath()
-    getDateIndexes()
+    global str_data_indexes
 
     # Run this part only once to add header
     header = getHeaderList()
-    # print("Header: ", header)
     writeCSV(header, 'w')
 
     for filename in filenames:
         content = getContentList(filename)
-        # print(f"Content ({filename}): ", content)
+        str_data_indexes.append(findStrIndexes(content))
         writeCSV(content, 'a')
+    print('csv generated')
 
 
-if __name__ == '__main__':
-    generateExifDataset()
+# if __name__ == '__main__':
+#     generateExifDataset()
 
