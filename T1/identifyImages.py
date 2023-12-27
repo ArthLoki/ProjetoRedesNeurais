@@ -37,8 +37,6 @@ def importCSVData():
 
 
 def main():
-    filename = 'output.csv'
-
     # generate csv file from exif data/raw data. it still need to be changed later
     generateExifDataset()
 
