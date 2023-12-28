@@ -1,6 +1,7 @@
 import string
 from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
 import os
+from contertString2number import string2number, getListIndexes
 
 # Global variables
 # 1 - Path
@@ -16,9 +17,11 @@ csv_filename = 'output.csv'
 csv_total_path = f'{csv_path}/{csv_filename}'
 
 # 3 - aux variables
-global alphabet, str_data_indexes
+global alphabet, str_data_indexes, dateIndexes, all_content
 alphabet = [letter for letter in string.ascii_letters+string.punctuation.replace('.', '')+' ']
 str_data_indexes = []
+dateIndexes = []
+all_content = []
 
 
 # Funções
@@ -41,7 +44,7 @@ def getSpecificIndexesFromContent(input, content):
     return indexes
 
 
-def getMultSpecificIndexes(lInput, content):
+def getMultSpecificIndexesFromContent(lInput, content):
     indexes = []
     for input in lInput:
         aux = getSpecificIndexesFromContent(input, content)
@@ -52,7 +55,8 @@ def getMultSpecificIndexes(lInput, content):
 
 
 def getDateIndexes(content):
-    dateIndexes = getMultSpecificIndexes(['DateTime', ':'], content)
+    global dateIndexes
+    dateIndexes = getMultSpecificIndexesFromContent(['DateTime', 'Time', ':'], content)
     return dateIndexes
 
 
@@ -62,9 +66,11 @@ def findIndexFilePath():
 
 
 def findStrIndexes(content):
-    strIndexes = sorted(getMultSpecificIndexes(alphabet, content))
+    global str_data_indexes, dateIndexes
 
+    strIndexes = sorted(getMultSpecificIndexesFromContent(alphabet, content))
     dateIndexes = getDateIndexes(content)
+
     for i in dateIndexes:
         if i in strIndexes:
             strIndexes.remove(i)
@@ -95,7 +101,7 @@ def processingData(content, escolha_tratamento):
     return content
 
 
-def writeCSV(content, modo, is_header=False):
+def writeCSV(content, modo):
     file = open(csv_total_path, modo)
     if type(content) == list:
         file.write(content[0])
@@ -107,6 +113,7 @@ def writeCSV(content, modo, is_header=False):
         file.write('\n')
     file.close()
     return
+
 
 def getHeaderList():
     file = openTXT(data_path, filenames[0])
@@ -147,19 +154,21 @@ def getContentList(filename):
 
 # Main
 def generateExifDataset():
-    global str_data_indexes
+    global str_data_indexes, all_content
 
     # Run this part only once to add header
     header = getHeaderList()
     writeCSV(header, 'w')
 
-    for filename in filenames:
+    for i, filename in enumerate(filenames):
         content = getContentList(filename)
+
         str_data_indexes.append(findStrIndexes(content))
+        all_content.append(content)
         writeCSV(content, 'a')
     print('csv generated')
 
-
+# Run if you want to test csv generation
 # if __name__ == '__main__':
 #     generateExifDataset()
 

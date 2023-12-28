@@ -1,12 +1,17 @@
 from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
 from ProjetoRedesNeurais.auxiliary_func.getTimer import timer_data
+
 import numpy as np
 import torch
 import csv
 import os
 
-from getFormatedExifData import generateExifDataset, getSpecificIndexes, getMultSpecificIndexes
+from getFormatedExifData import generateExifDataset, getSpecificIndexes
+from getFormatedExifData import getSpecificIndexesFromContent, getMultSpecificIndexesFromContent
 from getFormatedExifData import base_path, data_path, csv_path, csv_filename, filenames
+from getFormatedExifData import str_data_indexes, dateIndexes, all_content
+
+from contertString2number import str2num, date2num
 
 
 def importCSVData():
@@ -14,9 +19,25 @@ def importCSVData():
         csv_path+'/'+csv_filename,
         dtype=np.float32,
         delimiter=';',
-        skiprows=1
+        skiprows=1,
+        converters={}
     )
-    return torch.from_numpy(csv_data_numpy)  # Returns a PyTorch Tensor
+    return torch.from_numpy(csv_data_num)  # Returns a PyTorch Tensor
+
+
+def getConverters(content):
+    converters = {}
+
+    # add texts
+    for i in str_data_indexes:
+        converters[i] = str2num(content, i)
+
+    # add date
+    for j in dateIndexes:
+        converters[j] = date2num(content, j)
+
+    return converters
+
 
 # REFORMULAR
 # def getOgColumnList():
@@ -41,8 +62,8 @@ def main():
     generateExifDataset()
 
     # import csv data to a pytorch tensor
-    # exif_data = importCSVData()
-    # print(exif_data.shape)
+    exif_data = importCSVData()
+    print(exif_data.shape)
 
 
 if __name__ == '__main__':

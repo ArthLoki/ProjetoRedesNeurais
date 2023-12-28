@@ -180,3 +180,14 @@ class CSVfile:
 
 # if __name__ == '__main__':
 #     generateExifDataset()
+
+
+
+def getConverters(content, index, conversion):
+    converters = {}
+    if i in list_indexes:
+        converters[index] = string2number(content, index, conversion)
+        return converters[index]
+
+
+# converters={i: lambda content, i, conversion: string2number(content, i, conversion) for i in getListIndexes(conversion)}
