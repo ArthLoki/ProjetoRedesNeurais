@@ -22,7 +22,7 @@ def importCSVData():
         skiprows=1,
         converters={}
     )
-    return torch.from_numpy(csv_data_num)  # Returns a PyTorch Tensor
+    return torch.from_numpy(csv_data_numpy)  # Returns a PyTorch Tensor
 
 
 def getConverters(content):
