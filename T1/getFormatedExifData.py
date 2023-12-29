@@ -16,11 +16,8 @@ csv_filename = 'output.csv'
 csv_total_path = f'{csv_path}/{csv_filename}'
 
 # 3 - aux variables
-global alphabet, str_data_indexes, dateIndexes, all_content
+global alphabet
 alphabet = [letter for letter in string.ascii_letters+string.punctuation.replace('.', '')+' ']
-str_data_indexes = []
-dateIndexes = []
-all_content = []
 
 
 # Funções
@@ -153,7 +150,8 @@ def getContentList(filename):
 
 
 def generateExifDataset():
-    global all_content, dateIndexes
+    all_content = []
+    str_data_indexes = []
 
     # Run this part only once to add header
     header = getHeaderList()
@@ -163,11 +161,13 @@ def generateExifDataset():
     for i, filename in enumerate(filenames):
         content = getContentList(filename)
 
-        str_data_indexes = findStrIndexes(content)
-        print(f'str_data_indexes: {str_data_indexes}\ndateIndexes: {dateIndexes}')
+        str_data_indexes.append(findStrIndexes(content))
+        # print(f'str_data_indexes: {str_data_indexes}\ndateIndexes: {dateIndexes}')
         all_content.append(content)
         writeCSV(content, 'a')
     print('csv generated')
+    return (all_content, dateIndexes, str_data_indexes)
+
 
 # Run if you want to test csv generation
 # if __name__ == '__main__':

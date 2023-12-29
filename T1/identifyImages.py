@@ -9,18 +9,25 @@ import os
 from getFormatedExifData import generateExifDataset, getSpecificIndexes
 # from getFormatedExifData import getSpecificIndexesFromContent, getMultSpecificIndexesFromContent
 from getFormatedExifData import base_path, data_path, csv_path, csv_filename, filenames
-from getFormatedExifData import str_data_indexes, dateIndexes, all_content
 
 from contertString2number import str2num, date2num
 
+from printListData import printListDataContent
 
-def importCSVData():
+
+global str_data_indexes, dateIndexes, all_content
+str_data_indexes = []
+dateIndexes = []
+all_content = []
+
+
+def importCSVData(counter):
     csv_data_numpy = np.loadtxt(
         csv_path+'/'+csv_filename,
         dtype=np.float32,
         delimiter=';',
         skiprows=1,
-        converters={i: lambda content: getConverters(content, i) for i in str_data_indexes}
+        converters={i: lambda content: getConverters(content, i) for i in str_data_indexes[counter]}
     )
     return torch.from_numpy(csv_data_numpy)  # Returns a PyTorch Tensor
 
@@ -39,7 +46,10 @@ def importCSVData():
 #     return converters
 
 def getConverters(content, i):
-    if i in dateIndexes:
+    print(dateIndexes[i])
+
+    content = list(content)
+    if i in list(dateIndexes[i]):
         return date2num(content[i])
     else:
         return str2num(content[i])
@@ -64,13 +74,29 @@ def getConverters(content, i):
 
 
 def main():
+    global str_data_indexes, dateIndexes, all_content
+
+    counter = 0
+
     # generate csv file from exif data/raw data. it still need to be changed later
-    generateExifDataset()
-    print(str_data_indexes, dateIndexes)
+    data = generateExifDataset()
+
+    all_content = data[0]
+    dateIndexes = data[1]
+    str_data_indexes = data[2]
+
+    # printListDataContent(all_content)
+    # print('\n')
+    # printListDataContent(dateIndexes)
+    # print('\n')
+    # printListDataContent(str_data_indexes)
 
     # import csv data to a pytorch tensor
-    exif_data = importCSVData()
+    exif_data = importCSVData(counter)
     print(exif_data.shape)
+
+    counter += 1
+    return
 
 
 if __name__ == '__main__':
