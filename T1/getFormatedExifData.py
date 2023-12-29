@@ -2,6 +2,8 @@ import string
 from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
 import os
 
+from contertString2number import convertDinamicallyData
+
 # Global variables
 # 1 - Path
 global base_path, data_path, csv_path, csv_total_path
@@ -10,10 +12,10 @@ data_path = f'{base_path}/Images/T1'
 csv_path = f'{base_path}/T1'
 
 # 2 - Files
-global filenames, csv_filename
+global filenames, csv_filename1, csv_filename2
 filenames = [name for name in os.listdir(data_path) if os.path.splitext(name)[-1] == '.jpg']
-csv_filename = 'output.csv'
-csv_total_path = f'{csv_path}/{csv_filename}'
+csv_filename1 = 'output.csv'
+csv_filename2 = 'original_dataset.csv'
 
 # 3 - aux variables
 global alphabet
@@ -22,7 +24,7 @@ alphabet = [letter for letter in string.ascii_letters+string.punctuation.replace
 
 # Funções
 def getSpecificIndexes(input):
-    file = openTXT(data_path, filenames[0])
+    file = openTXT(data_path, filenames[0])  # gets header from the first exif file
     header = createContentList(file, 0)
 
     indexes = []
@@ -51,9 +53,18 @@ def getMultSpecificIndexesFromContent(lInput, content):
 
 
 def getDateIndexes(content):
-    global dateIndexes
-    dateIndexes = sorted(getMultSpecificIndexesFromContent(['DateTime', 'Time', ':'], content))
+    dateIndexes = sorted(getMultSpecificIndexesFromContent(['DateTime'], content))
     return tuple(dateIndexes)
+
+
+def getOffsetTimeIndexes(content):
+    offsetTimeIndexes = sorted(getMultSpecificIndexesFromContent(['OffsetTime'], content))
+    return tuple(offsetTimeIndexes)
+
+
+def getDivDataIndexes(content):
+    divDataIndexes = sorted(getMultSpecificIndexesFromContent(['ShutterSpeed', 'Brightness', 'ExposureBias'], content))
+    return tuple(divDataIndexes)
 
 
 def findIndexFilePath():
@@ -97,10 +108,10 @@ def processingData(content, escolha_tratamento):
     return content
 
 
-def writeCSV(content, modo):
-    file = open(csv_total_path, modo)
+def writeCSV(content, modo, filename):
+    file = open(csv_path+'/'+filename, modo)
     if type(content) == list:
-        file.write(content[0])
+        file.write(str(content[0]))
         for c in content[1:]:
             if c == '<undefined>':
                 file.write(f';{0}')
@@ -151,25 +162,33 @@ def getContentList(filename):
 
 def generateExifDataset():
     all_content = []
-    str_data_indexes = []
 
     # Run this part only once to add header
     header = getHeaderList()
+
     dateIndexes = getDateIndexes(header)
-    writeCSV(header, 'w')
+    offsetTimeIndexes = getOffsetTimeIndexes(header)
+    divDataIndexes = getDivDataIndexes(header)
+
+    print(f'dateIndexes: {dateIndexes}\noffsetTimeIndexes: {offsetTimeIndexes}\ndivDataIndexes: {divDataIndexes}')
+
+    writeCSV(header, 'w', csv_filename1)
+    writeCSV(header, 'w', csv_filename2)
 
     for i, filename in enumerate(filenames):
         content = getContentList(filename)
 
-        str_data_indexes.append(findStrIndexes(content))
-        # print(f'str_data_indexes: {str_data_indexes}\ndateIndexes: {dateIndexes}')
-        all_content.append(content)
-        writeCSV(content, 'a')
+        writeCSV(content, 'a', csv_filename2)
+
+        str_data_indexes = findStrIndexes(content)
+        content = convertDinamicallyData(content, str_data_indexes, dateIndexes, offsetTimeIndexes, divDataIndexes)
+        # all_content.append(content)
+
+        writeCSV(content, 'a', csv_filename1)
     print('csv generated')
-    return (all_content, dateIndexes, str_data_indexes)
+    return
 
 
 # Run if you want to test csv generation
-# if __name__ == '__main__':
-#     generateExifDataset()
-
+if __name__ == '__main__':
+    generateExifDataset()

@@ -8,7 +8,7 @@ import os
 
 from getFormatedExifData import generateExifDataset, getSpecificIndexes
 # from getFormatedExifData import getSpecificIndexesFromContent, getMultSpecificIndexesFromContent
-from getFormatedExifData import base_path, data_path, csv_path, csv_filename, filenames
+from getFormatedExifData import base_path, data_path, csv_path, csv_filename1, filenames
 
 from contertString2number import str2num, date2num
 
@@ -23,11 +23,11 @@ all_content = []
 
 def importCSVData(counter):
     csv_data_numpy = np.loadtxt(
-        csv_path+'/'+csv_filename,
+        csv_path+'/'+csv_filename1,
         dtype=np.float32,
         delimiter=';',
-        skiprows=1,
-        converters={i: lambda content: getConverters(content, i) for i in str_data_indexes[counter]}
+        skiprows=1
+        # converters={i+1: lambda content: getConverters(content, i) for i in str_data_indexes[counter]}
     )
     return torch.from_numpy(csv_data_numpy)  # Returns a PyTorch Tensor
 
@@ -45,14 +45,14 @@ def importCSVData(counter):
 #
 #     return converters
 
-def getConverters(content, i):
-    print(dateIndexes[i])
-
-    content = list(content)
-    if i in list(dateIndexes[i]):
-        return date2num(content[i])
-    else:
-        return str2num(content[i])
+# def getConverters(content, i):
+#     print(i, i+1)
+#
+#     content = list(content)
+#     if i in list(dateIndexes[i]):
+#         return date2num(content[i])
+#     else:
+#         return str2num(content[i])
 
 
 # REFORMULAR
