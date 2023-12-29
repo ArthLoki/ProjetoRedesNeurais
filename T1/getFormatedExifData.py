@@ -1,7 +1,6 @@
 import string
 from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
 import os
-from contertString2number import string2number, getListIndexes
 
 # Global variables
 # 1 - Path
@@ -56,8 +55,8 @@ def getMultSpecificIndexesFromContent(lInput, content):
 
 def getDateIndexes(content):
     global dateIndexes
-    dateIndexes = getMultSpecificIndexesFromContent(['DateTime', 'Time', ':'], content)
-    return dateIndexes
+    dateIndexes = sorted(getMultSpecificIndexesFromContent(['DateTime', 'Time', ':'], content))
+    return tuple(dateIndexes)
 
 
 def findIndexFilePath():
@@ -66,16 +65,16 @@ def findIndexFilePath():
 
 
 def findStrIndexes(content):
-    global str_data_indexes, dateIndexes
+    global str_data_indexes
 
     strIndexes = sorted(getMultSpecificIndexesFromContent(alphabet, content))
-    dateIndexes = getDateIndexes(content)
+    # dateIndexes = getDateIndexes(content)
 
-    for i in dateIndexes:
-        if i in strIndexes:
-            strIndexes.remove(i)
+    # for i in dateIndexes:
+    #     if i in strIndexes:
+    #         strIndexes.remove(i)
 
-    return strIndexes
+    return tuple(strIndexes)
 
 
 def openTXT(path, filename):
@@ -152,18 +151,20 @@ def getContentList(filename):
     file.close()
     return content
 
-# Main
+
 def generateExifDataset():
-    global str_data_indexes, all_content
+    global all_content, dateIndexes
 
     # Run this part only once to add header
     header = getHeaderList()
+    dateIndexes = getDateIndexes(header)
     writeCSV(header, 'w')
 
     for i, filename in enumerate(filenames):
         content = getContentList(filename)
 
-        str_data_indexes.append(findStrIndexes(content))
+        str_data_indexes = findStrIndexes(content)
+        print(f'str_data_indexes: {str_data_indexes}\ndateIndexes: {dateIndexes}')
         all_content.append(content)
         writeCSV(content, 'a')
     print('csv generated')

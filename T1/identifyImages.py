@@ -1,4 +1,4 @@
-from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
+# from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
 from ProjetoRedesNeurais.auxiliary_func.getTimer import timer_data
 
 import numpy as np
@@ -7,7 +7,7 @@ import csv
 import os
 
 from getFormatedExifData import generateExifDataset, getSpecificIndexes
-from getFormatedExifData import getSpecificIndexesFromContent, getMultSpecificIndexesFromContent
+# from getFormatedExifData import getSpecificIndexesFromContent, getMultSpecificIndexesFromContent
 from getFormatedExifData import base_path, data_path, csv_path, csv_filename, filenames
 from getFormatedExifData import str_data_indexes, dateIndexes, all_content
 
@@ -20,23 +20,29 @@ def importCSVData():
         dtype=np.float32,
         delimiter=';',
         skiprows=1,
-        converters={}
+        converters={i: lambda content: getConverters(content, i) for i in str_data_indexes}
     )
     return torch.from_numpy(csv_data_numpy)  # Returns a PyTorch Tensor
 
 
-def getConverters(content):
-    converters = {}
+# def getConverters(content):
+#     converters = {}
+#
+#     # add texts
+#     for i in str_data_indexes:
+#         converters[i] = str2num(content, i)
+#
+#     # add date
+#     for j in dateIndexes:
+#         converters[j] = date2num(content, j)
+#
+#     return converters
 
-    # add texts
-    for i in str_data_indexes:
-        converters[i] = str2num(content, i)
-
-    # add date
-    for j in dateIndexes:
-        converters[j] = date2num(content, j)
-
-    return converters
+def getConverters(content, i):
+    if i in dateIndexes:
+        return date2num(content[i])
+    else:
+        return str2num(content[i])
 
 
 # REFORMULAR
@@ -60,6 +66,7 @@ def getConverters(content):
 def main():
     # generate csv file from exif data/raw data. it still need to be changed later
     generateExifDataset()
+    print(str_data_indexes, dateIndexes)
 
     # import csv data to a pytorch tensor
     exif_data = importCSVData()
@@ -68,4 +75,3 @@ def main():
 
 if __name__ == '__main__':
     timer_data(main)
-
