@@ -113,10 +113,7 @@ def writeCSV(content, modo, filename):
     if type(content) == list:
         file.write(str(content[0]))
         for c in content[1:]:
-            if c == '<undefined>':
-                file.write(f';{0}')
-            else:
-                file.write(f';{c}')
+            file.write(f';{str(c)}')
         file.write('\n')
     file.close()
     return
@@ -170,21 +167,23 @@ def generateExifDataset():
     offsetTimeIndexes = getOffsetTimeIndexes(header)
     divDataIndexes = getDivDataIndexes(header)
 
-    print(f'dateIndexes: {dateIndexes}\noffsetTimeIndexes: {offsetTimeIndexes}\ndivDataIndexes: {divDataIndexes}')
+    # print(f'dateIndexes: {dateIndexes}\noffsetTimeIndexes: {offsetTimeIndexes}\ndivDataIndexes: {divDataIndexes}')
 
     writeCSV(header, 'w', csv_filename1)
     writeCSV(header, 'w', csv_filename2)
 
     for i, filename in enumerate(filenames):
+        print("Processing file: ", filename)
         content = getContentList(filename)
 
         writeCSV(content, 'a', csv_filename2)
 
         str_data_indexes = findStrIndexes(content)
-        content = convertDinamicallyData(content, str_data_indexes, dateIndexes, offsetTimeIndexes, divDataIndexes)
+        content = convertDinamicallyData(content, header, str_data_indexes, dateIndexes, offsetTimeIndexes, divDataIndexes)
         # all_content.append(content)
 
         writeCSV(content, 'a', csv_filename1)
+        print('\n')
     print('csv generated')
     return
 
