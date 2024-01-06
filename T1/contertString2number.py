@@ -33,25 +33,18 @@ def str2num(data):
     return normalized_value
 
 
-def convertDinamicallyData(data, header, str_data_indexes, dateIndexes, offsetTimeIndexes, divDataIndexes):
+def convertDinamicallyData(data, str_data_indexes, dateIndexes, offsetTimeIndexes, divDataIndexes):
 
     content = list(data)
     for i in str_data_indexes:
-        # print(f'{i} - data: {content[i]}')
         if i in dateIndexes:
-            print(f'{i} - Date: {content[i]}, Header: {header[i]}')
             content[i] = date2num(content[i])
         elif i in offsetTimeIndexes:
-            print(f'{i} - Offset: {content[i]}, Header: {header[i]}')
             content[i] = offset_time2num(content[i])
         elif i in divDataIndexes:
-            print(f'{i} - DivData: {content[i]}, Header: {header[i]}')
             content[i] = div_data2num(content[i])
         elif content[i] == '<undefined>':
-            print(f'{i} - Text: {content[i]}, Header: {header[i]}')
             content[i] = 0.0
         else:
-            print(f'{i} - Text: {content[i]}, Header: {header[i]}')
             content[i] = str2num(content[i])
-        # print(f'{i} - {content[i]}')
     return content

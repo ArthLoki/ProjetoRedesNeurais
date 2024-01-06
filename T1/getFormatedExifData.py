@@ -1,6 +1,7 @@
 import string
 from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
 import os
+from printListData import printListDataContent, getIndex
 
 from contertString2number import convertDinamicallyData
 
@@ -52,8 +53,23 @@ def getMultSpecificIndexesFromContent(lInput, content):
     return indexes
 
 
-def getDateIndexes(content):
+def getPartiallyNumericIndexesFromContent(content, count1, count2, str_input='/ :'):
+    indexes = []
+
+    for index, data in enumerate(content):
+        if index == '/ :':
+            if (index not in indexes) and (content.count('/') == count1 and content.count(':') == count2):
+                indexes.append(index)
+    return indexes
+
+
+def getDateIndexesHeader(content):
     dateIndexes = sorted(getMultSpecificIndexesFromContent(['DateTime'], content))
+    return tuple(dateIndexes)
+
+
+def getDateIndexesContent(content):
+    dateIndexes = sorted(getDateTimeIndexesFromContent(["/:"], content))
     return tuple(dateIndexes)
 
 
@@ -73,8 +89,6 @@ def findIndexFilePath():
 
 
 def findStrIndexes(content):
-    global str_data_indexes
-
     strIndexes = sorted(getMultSpecificIndexesFromContent(alphabet, content))
     # dateIndexes = getDateIndexes(content)
 
@@ -106,6 +120,23 @@ def processingData(content, escolha_tratamento):
         for i, h in enumerate(content):
             content[i] = h.split('/')[-1]
     return content
+
+
+def getOgColumnData():
+    ogColumnList = []
+
+    # 1 - check if 'og' is in each filename in this list. If so, append 1 to the ogColumnList, else append 0
+    for i, name in enumerate(filenames):
+        if 'og_' in name:
+            ogColumnList.append(1.0)
+        else:
+            ogColumnList.append(0.0)
+
+    # 2 - create a tensor containing the content of ogColumnList
+    # tensor = torch.tensor(ogColumnList)
+
+    # 3  - return
+    return ogColumnList
 
 
 def writeCSV(content, modo, filename):
@@ -162,32 +193,37 @@ def generateExifDataset():
 
     # Run this part only once to add header
     header = getHeaderList()
-
-    dateIndexes = getDateIndexes(header)
-    offsetTimeIndexes = getOffsetTimeIndexes(header)
-    divDataIndexes = getDivDataIndexes(header)
-
-    # print(f'dateIndexes: {dateIndexes}\noffsetTimeIndexes: {offsetTimeIndexes}\ndivDataIndexes: {divDataIndexes}')
+    header.append('OriginalImage')
+    ogColumnData = getOgColumnData()
 
     writeCSV(header, 'w', csv_filename1)
+
     writeCSV(header, 'w', csv_filename2)
 
     for i, filename in enumerate(filenames):
-        print("Processing file: ", filename)
         content = getContentList(filename)
+        content.append(str(ogColumnData[i]))
 
         writeCSV(content, 'a', csv_filename2)
 
+        dateIndexes = getPartiallyNumericIndexesFromContent(content, 2, 1)
+        offsetTimeIndexes = getPartiallyNumericIndexesFromContent(content, 0, 1)
+        divDataIndexes = getPartiallyNumericIndexesFromContent(content, 1, 0)
         str_data_indexes = findStrIndexes(content)
-        content = convertDinamicallyData(content, header, str_data_indexes, dateIndexes, offsetTimeIndexes, divDataIndexes)
-        # all_content.append(content)
+
+        content = convertDinamicallyData(
+            content,
+            str_data_indexes,
+            dateIndexes,
+            offsetTimeIndexes,
+            divDataIndexes
+        )
 
         writeCSV(content, 'a', csv_filename1)
-        print('\n')
     print('csv generated')
     return
 
 
 # Run if you want to test csv generation
-if __name__ == '__main__':
-    generateExifDataset()
+# if __name__ == '__main__':
+#     generateExifDataset()
