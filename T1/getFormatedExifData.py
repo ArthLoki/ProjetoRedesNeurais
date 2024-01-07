@@ -1,6 +1,7 @@
 import string
 from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
 import os
+import csv
 from printListData import printListDataContent, getIndex
 
 from contertString2number import convertDinamicallyData
@@ -156,6 +157,10 @@ def getHeaderList():
     header = processingData(header, 1)
     file.close()
     return header
+
+    # csv_exif = csv.reader(open(data_path), delimiter=";")
+    # col_list = next(csv_exif)
+    # return col_list
 
 
 def cleanDataContentList(lData):
