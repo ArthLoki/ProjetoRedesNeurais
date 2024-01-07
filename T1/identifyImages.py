@@ -33,20 +33,26 @@ def main():
 
     # Import csv data to a pytorch tensor
     exif_data = importCSVData()
-    print(exif_data.shape)
+    # print(exif_data.shape)
 
-    data = exif_data[:, :-1]  # all except the last column of each row
-    target = exif_data[:, -1]  # only the last column of each row
-
-    # Before the permutation of the columns, we need to reshape the tensor
-    # Check if the tensor is contiguous and turning it contiguous if it's not
+    # Before the permutation of the columns, we need to
+    # check if the tensor is contiguous and turn it contiguous if it's not
     isContiguous = exif_data.is_contiguous()
     if not isContiguous:
         exif_data = exif_data.contiguous()
 
-    # Reshape tensor
-
     # Permute the tensor columns
+    desired_order = [
+        37, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+        18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+        35, 36, 38, 39, 40, 41, 42, 43, 0, 44
+    ]
+
+    exif_data_permuted = exif_data[:, desired_order]  # get the desired order and permute columns
+
+    # data = exif_data_permuted[:, :-1]  # all except the last column of each row
+    # target = exif_data_permuted[:, -1]  # only the last column of each row
+
 
 
     return

@@ -100,7 +100,7 @@ def findStrIndexes(content):
 
 
 def openTXT(path, filename):
-    file_path = f'{path}/{filename}.txt'
+    file_path = f'{path}/exif_txt/{filename}.txt'
     file = open(file_path, 'r')
 
     return file
