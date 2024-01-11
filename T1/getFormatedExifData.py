@@ -102,6 +102,7 @@ def findStrIndexes(content):
 
 def openTXT(path, filename):
     file_path = f'{path}/exif_txt/{filename}.txt'
+    # file_path = f'{path}/{filename}.txt'
     file = open(file_path, 'r')
 
     return file
@@ -201,6 +202,10 @@ def generateExifDataset():
     header.append('OriginalImage')
     ogColumnData = getOgColumnData()
 
+    for i, name in enumerate(header):
+        print('{:6}: {:100}'.format(i, name))
+    print('\n')
+
     writeCSV(header, 'w', csv_filename1)
 
     writeCSV(header, 'w', csv_filename2)
@@ -215,6 +220,7 @@ def generateExifDataset():
         offsetTimeIndexes = getPartiallyNumericIndexesFromContent(content, 0, 1)
         divDataIndexes = getPartiallyNumericIndexesFromContent(content, 1, 0)
         str_data_indexes = findStrIndexes(content)
+        print('Str indexes from line {}: {}'.format(i, str_data_indexes))
 
         content = convertDinamicallyData(
             content,
@@ -230,5 +236,5 @@ def generateExifDataset():
 
 
 # Run if you want to test csv generation
-# if __name__ == '__main__':
-#     generateExifDataset()
+if __name__ == '__main__':
+    generateExifDataset()

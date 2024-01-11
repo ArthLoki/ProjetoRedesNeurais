@@ -26,67 +26,91 @@ def importCSVData():
     return torch.from_numpy(csv_data_numpy)  # Returns a PyTorch Tensor
 
 
+# noinspection DuplicatedCode
 def checkImageData(exif_data_permuted):
     data = exif_data_permuted[:, :-1]  # all except the last column of each row
     target = exif_data_permuted[:, -1]  # only the last column of each row
 
     col_list = getHeaderList()
+    print(col_list[31], data[:, 31])
 
     og_data = data[target == 1.0]
     not_og_data = data[target != 1.0]
 
     og_mean = torch.mean(og_data, dim=0)
-    not_og_mean = torch.mean(not_og_data, dim=0)
+    nog_mean = torch.mean(not_og_data, dim=0)
 
-    for i, args in enumerate(zip(col_list, og_mean, not_og_mean)):
-        diff = abs(args[2].tolist() - args[1].tolist())
-        print('{:2} - {:20}\t\t{:6.2f}\t\t{:6.2f}\t\t{:6.2f}'.format(i, *args, diff))
+    # for i, args in enumerate(zip(col_list, og_mean, nog_mean)):
+    #     diff = args[1].tolist() - args[2].tolist()
+    #     print('{:2} - {:20}\t\t{:6.2f}\t\t{:6.2f}\t\t{:6.2f}'.format(i, *args, diff))
 
-    # The original images seems to have a higher /Exif/Image/YResolution (7), /Exif/Photo/FocalLength (28),
-    # /Exif/Photo/ColorSpace (29)
+    # The original images seems to have a higher /Exif/Image/YResolution (7), /Exif/Photo/FocalLength (28)
     # Meanwhile, the called 'not original images' seems to have higher /Exif/Photo/MaxAperture (25),
     # /Exif/Photo/MeteringMode (26)
 
     # Finding original images
-    og_img_threshold = 468.40  # using /Exif/Image/YResolution (7)
-    og_img_data = data[:, 7]
-    og_predicted_indexes = torch.lt(og_img_data, og_img_threshold)
+    og_predicted_indexes = getPredictedIndexes(data, og_mean, 31, 'less than')
 
     # Finding 'not original' images
-    not_og_img_threshold = 2088.43  # using /Exif/Photo/MaxAperture (25)
-    not_og_img_data = data[:, 25]
-    not_predicted_indexes = torch.lt(not_og_img_data, not_og_img_threshold)
+    nog_predicted_indexes = getPredictedIndexes(data, nog_mean, 31, 'greater than')
 
-    # the indexes of the actually original images
+    # the indexes of the images
     og_actual_indexes = target == 1.0
-    not_og_actual_indexes = target != 1.0
     print(og_actual_indexes.sum())
-    print(not_og_actual_indexes.sum())
+
+    nog_actual_indexes = target != 1.0
+    print(nog_actual_indexes.sum())
 
     # Comparing actual original images
     print('\n---> Original Images')
-    n_matches_og = torch.sum(og_actual_indexes & og_predicted_indexes).item()
-    n_predicted_og = torch.sum(og_predicted_indexes).item()
-    n_actual_og = torch.sum(og_actual_indexes).item()
-    print(n_matches_og, n_matches_og / n_predicted_og, n_matches_og / n_actual_og)
+    printResults(og_actual_indexes, og_predicted_indexes)
 
     # Comparing not original images
     print('\n---> Not Original Images')
-    n_matches_nog = torch.sum(not_og_actual_indexes & not_predicted_indexes).item()
-    n_predicted_nog = torch.sum(not_predicted_indexes).item()
-    n_actual_nog = torch.sum(not_og_actual_indexes).item()
-    print(n_matches_nog, n_matches_nog / n_predicted_nog, n_matches_nog / n_actual_nog)
+    printResults(nog_actual_indexes, nog_predicted_indexes)
 
+    return
+
+
+def getPredictedIndexes(data, data_mean, index, modo='greater than'):
+    img_threshold = data_mean[index].float()
+    img_data = data[:, index]
+
+    predicted_indexes = torch.gt(img_data, img_threshold)
+
+    if modo != 'greater than':
+        if modo == 'greater than or equal':
+            predicted_indexes = torch.ge(img_data, img_threshold)
+        elif modo == 'less than':
+            predicted_indexes = torch.lt(img_data, img_threshold)
+        elif modo == 'less than or equal':
+            predicted_indexes = torch.le(img_data, img_threshold)
+
+    return predicted_indexes
+
+
+def printResults(actual_indexes, predicted_indexes):
+    n_matches = torch.sum(actual_indexes & predicted_indexes).item()
+    n_predicted = torch.sum(predicted_indexes).item()
+    n_actual = torch.sum(actual_indexes).item()
+
+    print(n_matches, n_predicted, n_actual)
+
+    if n_predicted != 0:
+        print('Number of matches: {:3}'.format(n_matches))
+        print('% of n_predicted / n_actual: {:6.2f}'.format(n_predicted / n_actual))
+        print('% of n_matches / n_predicted: {:6.2f}'.format(n_matches / n_predicted))
+        print('% of n_matches / n_actual: {:6.2f}'.format(n_matches / n_actual))
     return
 
 
 def main():
     # Generate csv file from exif data/raw data. it still needs to be changed later
-    generateExifDataset()
+    # generateExifDataset()
 
     # Import csv data to a pytorch tensor
     exif_data = importCSVData()
-    # print(exif_data.shape)
+    print(exif_data.shape)
 
     # Before the permutation of the columns, we need to
     # check if the tensor is contiguous and turn it contiguous if it's not
@@ -102,9 +126,6 @@ def main():
     ]
 
     exif_data_permuted = exif_data[:, desired_order]  # get the desired order and permute columns
-
-    # data = exif_data_permuted[:, :-1]  # all except the last column of each row
-    # target = exif_data_permuted[:, -1]  # only the last column of each row
 
     checkImageData(exif_data_permuted)
 
