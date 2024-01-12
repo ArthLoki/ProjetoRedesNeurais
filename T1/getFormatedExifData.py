@@ -8,9 +8,10 @@ from contertString2number import convertDinamicallyData
 
 # Global variables
 # 1 - Path
-global base_path, data_path, csv_path, csv_total_path
+global base_path, data_path, csv_path, csv_total_path, exif_path
 base_path = get_base_path()
 data_path = f'{base_path}/Images/T1'
+exif_path = f'{data_path}/exif_txt'
 csv_path = f'{base_path}/T1'
 
 # 2 - Files
@@ -220,7 +221,7 @@ def generateExifDataset():
         offsetTimeIndexes = getPartiallyNumericIndexesFromContent(content, 0, 1)
         divDataIndexes = getPartiallyNumericIndexesFromContent(content, 1, 0)
         str_data_indexes = findStrIndexes(content)
-        print('Str indexes from line {}: {}'.format(i, str_data_indexes))
+        # print('Str indexes from line {}: {}'.format(i, str_data_indexes))
 
         content = convertDinamicallyData(
             content,
@@ -236,5 +237,5 @@ def generateExifDataset():
 
 
 # Run if you want to test csv generation
-if __name__ == '__main__':
-    generateExifDataset()
+# if __name__ == '__main__':
+#     generateExifDataset()
