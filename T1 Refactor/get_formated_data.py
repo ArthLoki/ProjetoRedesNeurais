@@ -27,10 +27,9 @@ alphabet = [letter for letter in string.ascii_letters+string.punctuation.replace
 
 # Funções
 
-# Function to get indexes according to input given
+# Function to get indexes according to input given from header
 def getSpecificIndexes(input):
-    file = openTXT(data_path, filenames[0])  # gets header from the first exif file
-    header = createContentList(file, 0)
+    header = getHeaderList()
 
     indexes = []
     for i, label in enumerate(header):
@@ -39,6 +38,7 @@ def getSpecificIndexes(input):
     return indexes
 
 
+# Function to get indexes according to input given from data
 def getSpecificIndexesFromContent(input, content):
     indexes = []
     for i, data in enumerate(content):
@@ -47,6 +47,7 @@ def getSpecificIndexesFromContent(input, content):
     return indexes
 
 
+# Function to get indexes according to multiple input given from data
 def getMultSpecificIndexesFromContent(lInput, content):
     indexes = []
     for input in lInput:
@@ -57,6 +58,7 @@ def getMultSpecificIndexesFromContent(lInput, content):
     return indexes
 
 
+# Function to get partially numeric data such as date, offset etc
 def getPartiallyNumericIndexesFromContent(content, count1, count2, str_input='/ :'):
     indexes = []
 
@@ -102,14 +104,6 @@ def findStrIndexes(content):
     #         strIndexes.remove(i)
 
     return tuple(strIndexes)
-
-
-def openTXT(path, filename):
-    file_path = f'{path}/exif_txt/{filename}.txt'
-    # file_path = f'{path}/{filename}.txt'
-    file = open(file_path, 'r')
-
-    return file
 
 
 # According to escolha_tratamento, changes data
@@ -159,7 +153,7 @@ def writeCSV(content, modo, filename):
 
 # Gets the list of labels in header
 def getHeaderList():
-    file = openTXT(data_path, filenames[0])
+    file = open(exif_path+'/'+filenames[0]+'.txt', 'r')
     header = createContentList(file, 0)
     header = processingData(header, 1)
     file.close()
@@ -198,7 +192,7 @@ def createContentList(file, content_type):
 
 
 def getContentList(filename):
-    file = openTXT(data_path, filename)
+    file = open(exif_path+'/'+filename+'.txt', 'r')
     content = createContentList(file, 1)
     content = processingData(content, 1)
     file.close()

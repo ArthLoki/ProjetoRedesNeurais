@@ -1,21 +1,15 @@
-# TODO: Tudo o que não consegui fazer com Torch (T<num>) ou Numpy (N<num>) e outras partes (O<num>)
-# N1 - Usar o converters do loadtxt para converter string para numeric
-# T1 - Adicionar coluna booleana chamada de OriginalImage usando torch.Tensor.scatter_
-
-
 from ProjetoRedesNeurais.auxiliary_func.getTimer import timer_data
 
 import numpy as np
 import torch
 import os
 
-from getFormatedExifData import generateExifDataset, getSpecificIndexes, getHeaderList, findStrIndexes
-from getFormatedExifData import base_path, data_path, csv_path, csv_filename1, filenames
-
-from printListData import printListDataContent
+from get_formated_data import generateExifDataset, getSpecificIndexes, getHeaderList, findStrIndexes
+from get_formated_data import base_path, data_path, csv_path, csv_filename1, filenames
 
 
 def importCSVData():
+    # using np.loadtxt to create a numpy tensor from file
     csv_data_numpy = np.loadtxt(
         csv_path+'/'+csv_filename1,
         dtype=np.float32,
@@ -26,7 +20,6 @@ def importCSVData():
     return torch.from_numpy(csv_data_numpy)  # Returns a PyTorch Tensor
 
 
-# noinspection DuplicatedCode
 def checkImageData(exif_data_permuted):
     data = exif_data_permuted[:, :-1]  # all except the last column of each row
     target = exif_data_permuted[:, -1]  # only the last column of each row
