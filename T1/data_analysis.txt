@@ -1,22 +1,22 @@
 
 ---> COLUMN /File/Main/FileName (0)
 >>> Original Images
-Matches: 4
-Predicted: 10
+Matches: 7
+Predicted: 13
 Actual: 20
 
-% of n_predicted / n_actual: 0.50
-% of n_matches / n_predicted: 0.40
-% of n_matches / n_actual: 0.20
+% of n_predicted / n_actual: 0.65
+% of n_matches / n_predicted: 0.54
+% of n_matches / n_actual: 0.35
 
 
 >>> Not Original Images
 Matches: 17
-Predicted: 33
+Predicted: 35
 Actual: 23
 
-% of n_predicted / n_actual: 1.43
-% of n_matches / n_predicted: 0.52
+% of n_predicted / n_actual: 1.52
+% of n_matches / n_predicted: 0.49
 % of n_matches / n_actual: 0.74
 
 
@@ -80,24 +80,19 @@ Actual: 23
 
 ---> COLUMN /Exif/Image/Model (4)
 >>> Original Images
-Matches: 15
-Predicted: 38
+Matches: 6
+Predicted: 6
 Actual: 20
 
-% of n_predicted / n_actual: 1.90
-% of n_matches / n_predicted: 0.39
-% of n_matches / n_actual: 0.75
+% of n_predicted / n_actual: 0.30
+% of n_matches / n_predicted: 1.00
+% of n_matches / n_actual: 0.30
 
 
 >>> Not Original Images
 Matches: 0
-Predicted: 5
+Predicted: 0
 Actual: 23
-
-% of n_predicted / n_actual: 0.22
-% of n_matches / n_predicted: 0.00
-% of n_matches / n_actual: 0.00
-
 
 ---> COLUMN /Exif/Image/Orientation (5)
 >>> Original Images
@@ -175,38 +170,43 @@ Actual: 23
 
 ---> COLUMN /Exif/Image/Software (9)
 >>> Original Images
-Matches: 6
-Predicted: 6
+Matches: 15
+Predicted: 38
 Actual: 20
 
-% of n_predicted / n_actual: 0.30
-% of n_matches / n_predicted: 1.00
-% of n_matches / n_actual: 0.30
+% of n_predicted / n_actual: 1.90
+% of n_matches / n_predicted: 0.39
+% of n_matches / n_actual: 0.75
 
 
 >>> Not Original Images
 Matches: 0
-Predicted: 0
+Predicted: 5
 Actual: 23
+
+% of n_predicted / n_actual: 0.22
+% of n_matches / n_predicted: 0.00
+% of n_matches / n_actual: 0.00
+
 
 ---> COLUMN /Exif/Image/DateTime (10)
 >>> Original Images
 Matches: 9
-Predicted: 17
+Predicted: 22
 Actual: 20
 
-% of n_predicted / n_actual: 0.85
-% of n_matches / n_predicted: 0.53
+% of n_predicted / n_actual: 1.10
+% of n_matches / n_predicted: 0.41
 % of n_matches / n_actual: 0.45
 
 
 >>> Not Original Images
 Matches: 12
-Predicted: 20
+Predicted: 24
 Actual: 23
 
-% of n_predicted / n_actual: 0.87
-% of n_matches / n_predicted: 0.60
+% of n_predicted / n_actual: 1.04
+% of n_matches / n_predicted: 0.50
 % of n_matches / n_actual: 0.52
 
 
@@ -322,55 +322,55 @@ Actual: 20
 
 
 >>> Not Original Images
-Matches: 5
-Predicted: 6
+Matches: 4
+Predicted: 5
 Actual: 23
 
-% of n_predicted / n_actual: 0.26
-% of n_matches / n_predicted: 0.83
-% of n_matches / n_actual: 0.22
+% of n_predicted / n_actual: 0.22
+% of n_matches / n_predicted: 0.80
+% of n_matches / n_actual: 0.17
 
 
 ---> COLUMN /Exif/Photo/DateTimeOriginal (17)
 >>> Original Images
 Matches: 9
-Predicted: 17
+Predicted: 22
 Actual: 20
 
-% of n_predicted / n_actual: 0.85
-% of n_matches / n_predicted: 0.53
+% of n_predicted / n_actual: 1.10
+% of n_matches / n_predicted: 0.41
 % of n_matches / n_actual: 0.45
 
 
 >>> Not Original Images
 Matches: 12
-Predicted: 20
+Predicted: 24
 Actual: 23
 
-% of n_predicted / n_actual: 0.87
-% of n_matches / n_predicted: 0.60
+% of n_predicted / n_actual: 1.04
+% of n_matches / n_predicted: 0.50
 % of n_matches / n_actual: 0.52
 
 
 ---> COLUMN /Exif/Photo/DateTimeDigitized (18)
 >>> Original Images
-Matches: 8
-Predicted: 12
+Matches: 11
+Predicted: 25
 Actual: 20
 
-% of n_predicted / n_actual: 0.60
-% of n_matches / n_predicted: 0.67
-% of n_matches / n_actual: 0.40
+% of n_predicted / n_actual: 1.25
+% of n_matches / n_predicted: 0.44
+% of n_matches / n_actual: 0.55
 
 
 >>> Not Original Images
-Matches: 13
-Predicted: 17
+Matches: 11
+Predicted: 23
 Actual: 23
 
-% of n_predicted / n_actual: 0.74
-% of n_matches / n_predicted: 0.76
-% of n_matches / n_actual: 0.57
+% of n_predicted / n_actual: 1.00
+% of n_matches / n_predicted: 0.48
+% of n_matches / n_actual: 0.48
 
 
 ---> COLUMN /Exif/Photo/OffsetTime (19)
@@ -386,11 +386,11 @@ Actual: 20
 
 >>> Not Original Images
 Matches: 17
-Predicted: 37
+Predicted: 36
 Actual: 23
 
-% of n_predicted / n_actual: 1.61
-% of n_matches / n_predicted: 0.46
+% of n_predicted / n_actual: 1.57
+% of n_matches / n_predicted: 0.47
 % of n_matches / n_actual: 0.74
 
 
@@ -417,13 +417,13 @@ Actual: 23
 
 ---> COLUMN /Exif/Photo/ShutterSpeed (21)
 >>> Original Images
-Matches: 17
-Predicted: 40
+Matches: 2
+Predicted: 8
 Actual: 20
 
-% of n_predicted / n_actual: 2.00
-% of n_matches / n_predicted: 0.42
-% of n_matches / n_actual: 0.85
+% of n_predicted / n_actual: 0.40
+% of n_matches / n_predicted: 0.25
+% of n_matches / n_actual: 0.10
 
 
 >>> Not Original Images
@@ -459,13 +459,13 @@ Actual: 23
 
 ---> COLUMN /Exif/Photo/Brightness (23)
 >>> Original Images
-Matches: 3
-Predicted: 9
+Matches: 2
+Predicted: 8
 Actual: 20
 
-% of n_predicted / n_actual: 0.45
-% of n_matches / n_predicted: 0.33
-% of n_matches / n_actual: 0.15
+% of n_predicted / n_actual: 0.40
+% of n_matches / n_predicted: 0.25
+% of n_matches / n_actual: 0.10
 
 
 >>> Not Original Images
@@ -690,13 +690,13 @@ Actual: 23
 
 ---> COLUMN /Exif/Photo/DigitalZoomRatio (34)
 >>> Original Images
-Matches: 19
-Predicted: 36
+Matches: 17
+Predicted: 34
 Actual: 20
 
-% of n_predicted / n_actual: 1.80
-% of n_matches / n_predicted: 0.53
-% of n_matches / n_actual: 0.95
+% of n_predicted / n_actual: 1.70
+% of n_matches / n_predicted: 0.50
+% of n_matches / n_actual: 0.85
 
 
 >>> Not Original Images
@@ -879,21 +879,21 @@ Actual: 23
 
 ---> COLUMN /Exif/Thumbnail/ResolutionUnit (43)
 >>> Original Images
-Matches: 9
-Predicted: 18
+Matches: 10
+Predicted: 19
 Actual: 20
 
-% of n_predicted / n_actual: 0.90
-% of n_matches / n_predicted: 0.50
-% of n_matches / n_actual: 0.45
+% of n_predicted / n_actual: 0.95
+% of n_matches / n_predicted: 0.53
+% of n_matches / n_actual: 0.50
 
 
 >>> Not Original Images
-Matches: 14
-Predicted: 23
+Matches: 12
+Predicted: 20
 Actual: 23
 
-% of n_predicted / n_actual: 1.00
-% of n_matches / n_predicted: 0.61
-% of n_matches / n_actual: 0.61
+% of n_predicted / n_actual: 0.87
+% of n_matches / n_predicted: 0.60
+% of n_matches / n_actual: 0.52
 

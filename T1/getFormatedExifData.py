@@ -1,120 +1,28 @@
 import string
-from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path
 import os
 import csv
+
 from printListData import printListDataContent, getIndex
 
 from contertString2number import convertDinamicallyData
 
-# Global variables
-# 1 - Path
-global base_path, data_path, csv_path, csv_total_path, exif_path
-base_path = get_base_path()
-data_path = f'{base_path}/Images/T1'
-exif_path = f'{data_path}/exif_txt'
-csv_path = f'{base_path}/T1'
+from readFiles import writeCSV, openTXT, moveFile
 
-# 2 - Files
-global filenames, csv_filename1, csv_filename2
-filenames = [name for name in os.listdir(data_path) if os.path.splitext(name)[-1] == '.jpg']
-csv_filename1 = 'output.csv'
-csv_filename2 = 'original_dataset.csv'
+# from getIndexesFunc import getSpecificIndexes, getSpecificIndexesFromContent, getMultSpecificIndexesFromContent
+# from getIndexesFunc import getDateIndexesHeader, getDateIndexesContent, getOffsetTimeIndexes, getDivDataIndexes
+from getIndexesFunc import getPartiallyNumericIndexesFromContent, findIndexFilePath, findStrIndexes
 
-# 3 - aux variables
-global alphabet
-alphabet = [letter for letter in string.ascii_letters+string.punctuation.replace('.', '')+' ']
-
-
-# Funções
-
-# Function to get indexes according to input given
-def getSpecificIndexes(input):
-    file = openTXT(data_path, filenames[0])  # gets header from the first exif file
-    header = createContentList(file, 0)
-
-    indexes = []
-    for i, label in enumerate(header):
-        if input in label:
-            indexes.append(i)
-    return indexes
-
-
-def getSpecificIndexesFromContent(input, content):
-    indexes = []
-    for i, data in enumerate(content):
-        if input in data:
-            indexes.append(i)
-    return indexes
-
-
-def getMultSpecificIndexesFromContent(lInput, content):
-    indexes = []
-    for input in lInput:
-        aux = getSpecificIndexesFromContent(input, content)
-        for index in aux:
-            if index not in indexes:
-                indexes.append(index)
-    return indexes
-
-
-def getPartiallyNumericIndexesFromContent(content, count1, count2, str_input='/ :'):
-    indexes = []
-
-    for index, data in enumerate(content):
-        print('getPartiallyNumericIndexesFromContent:', index, data)
-        if index == '/ :':
-            if (index not in indexes) and (content.count('/') == count1 and content.count(':') == count2):
-                indexes.append(index)
-    return indexes
-
-
-def getDateIndexesHeader(content):
-    dateIndexes = sorted(getMultSpecificIndexesFromContent(['DateTime'], content))
-    return tuple(dateIndexes)
-
-
-def getDateIndexesContent(content):
-    dateIndexes = sorted(getDateTimeIndexesFromContent(["/:"], content))
-    return tuple(dateIndexes)
-
-
-def getOffsetTimeIndexes(content):
-    offsetTimeIndexes = sorted(getMultSpecificIndexesFromContent(['OffsetTime'], content))
-    return tuple(offsetTimeIndexes)
-
-
-def getDivDataIndexes(content):
-    divDataIndexes = sorted(getMultSpecificIndexesFromContent(['ShutterSpeed', 'Brightness', 'ExposureBias'], content))
-    return tuple(divDataIndexes)
-
-
-def findIndexFilePath():
-    FilePathIndex = getSpecificIndexes('FilePath')
-    return FilePathIndex[0]
-
-
-def findStrIndexes(content):
-    strIndexes = sorted(getMultSpecificIndexesFromContent(alphabet, content))
-    # dateIndexes = getDateIndexes(content)
-
-    # for i in dateIndexes:
-    #     if i in strIndexes:
-    #         strIndexes.remove(i)
-
-    return tuple(strIndexes)
-
-
-def openTXT(path, filename):
-    file_path = f'{path}/exif_txt/{filename}.txt'
-    # file_path = f'{path}/{filename}.txt'
-    file = open(file_path, 'r')
-
-    return file
+from globalVariables import base_path, data_path, exif_path, csv_path, current_path
+from globalVariables import filenames, csv_filename1, csv_filename2
+from globalVariables import alphabet
 
 
 # According to escolha_tratamento, changes data
 def processingData(content, escolha_tratamento):
-    filePathIndex = findIndexFilePath()
+    file = openTXT(data_path, filenames[0])  # gets header from the first exif file
+    header = createContentList(file, 0)
+
+    filePathIndex = findIndexFilePath(header)
 
     if escolha_tratamento == 0:
         # Replaces \\ to /
@@ -146,20 +54,9 @@ def getOgColumnData():
     return ogColumnList
 
 
-def writeCSV(content, modo, filename):
-    file = open(csv_path+'/'+filename, modo)
-    if type(content) == list:
-        file.write(str(content[0]))
-        for c in content[1:]:
-            file.write(f';{str(c)}')
-        file.write('\n')
-    file.close()
-    return
-
-
 # Gets the list of labels in header
 def getHeaderList():
-    file = openTXT(data_path, filenames[0])
+    file = openTXT(data_path, filenames[0])  # gets header from the first exif file
     header = createContentList(file, 0)
     header = processingData(header, 1)
     file.close()
@@ -172,7 +69,7 @@ def getHeaderList():
 
 def cleanDataContentList(lData):
     lDataFixed = []
-    print(lData)
+    # print(lData)
     for i in range(len(lData)):
         lDataFixed.append(lData[i].split('\"')[1])
     return lDataFixed
@@ -185,7 +82,7 @@ def createContentList(file, content_type):
         lData = str(line).strip().split(',')
         lData = cleanDataContentList(lData)
 
-        print(line, lData)
+        # print(line, lData)
 
         if content_type == 0:  # wants to get header list
             content.append(lData[0])
@@ -199,6 +96,9 @@ def createContentList(file, content_type):
 
 def getContentList(filename):
     file = openTXT(data_path, filename)
+
+    header = getHeaderList()
+
     content = createContentList(file, 1)
     content = processingData(content, 1)
     file.close()
@@ -216,15 +116,15 @@ def generateExifDataset():
     #     print('{:6}: {:100}'.format(i, name))
     # print('\n')
 
-    writeCSV(header, 'w', csv_filename1)
+    writeCSV(header, 'w', csv_filename1, current_path)
 
-    writeCSV(header, 'w', csv_filename2)
+    writeCSV(header, 'w', csv_filename2, current_path)
 
     for i, filename in enumerate(filenames):
         content = getContentList(filename)
         content.append(str(ogColumnData[i]))
 
-        writeCSV(content, 'a', csv_filename2)
+        writeCSV(content, 'a', csv_filename2, current_path)
 
         dateIndexes = getPartiallyNumericIndexesFromContent(content, 2, 1)
         offsetTimeIndexes = getPartiallyNumericIndexesFromContent(content, 0, 1)
@@ -240,11 +140,11 @@ def generateExifDataset():
             divDataIndexes
         )
 
-        writeCSV(content, 'a', csv_filename1)
+        writeCSV(content, 'a', csv_filename1, current_path)
     print('csv generated')
     return
 
 
 # Run if you want to test csv generation
-# if __name__ == '__main__':
-#     generateExifDataset()
+if __name__ == '__main__':
+    generateExifDataset()

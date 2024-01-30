@@ -18,7 +18,7 @@ def timer_data(func):
     # param function here
     func()
 
-    print('\n-----> END TIMER <-----\n')
+    print('\n-----> STOP TIMER <-----\n')
     end_time = get_timer()
     print_device_timer(start_time, end_time)
     return

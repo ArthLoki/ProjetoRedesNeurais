@@ -9,10 +9,11 @@ import numpy as np
 import torch
 import os
 
-from getFormatedExifData import generateExifDataset, getSpecificIndexes, getHeaderList, findStrIndexes
-from getFormatedExifData import base_path, data_path, csv_path, csv_filename1, filenames
-
+from getFormatedExifData import generateExifDataset, getHeaderList
+from getIndexesFunc import getSpecificIndexes, findStrIndexes
+from globalVariables import base_path, data_path, csv_path, csv_filename1, filenames
 from printListData import printListDataContent
+from readFiles import writeTXTfile, moveFile
 
 
 def importCSVData():
@@ -40,7 +41,11 @@ def checkImageData(exif_data_permuted):
     nog_mean = torch.mean(not_og_data, dim=0)
 
     for i in range(len(col_list)):
-        writeTXTfile('data_analysis', '\n---> COLUMN {} ({})'.format(col_list[i], i), 'a')
+        writeTXTfile(
+            'data_analysis',
+            '\n---> COLUMN {} ({})'.format(col_list[i], i),
+            'a'
+        )
 
         # Finding original images
         og_predicted_indexes = getPredictedIndexes(data, og_mean, i, 'less than')
@@ -54,19 +59,21 @@ def checkImageData(exif_data_permuted):
         nog_actual_indexes = target != 1.0
 
         # Comparing actual original images
-        writeTXTfile('data_analysis', '\n>>> Original Images', 'a')
+        writeTXTfile(
+            'data_analysis',
+            '\n>>> Original Images',
+            'a'
+        )
         getResults(og_actual_indexes, og_predicted_indexes)
 
         # Comparing not original images
-        writeTXTfile('data_analysis', '\n>>> Not Original Images', 'a')
+        writeTXTfile(
+            'data_analysis',
+            '\n>>> Not Original Images',
+            'a'
+        )
         getResults(nog_actual_indexes, nog_predicted_indexes)
     return
-
-
-def writeTXTfile(filename, content, modo):
-    file = open('{}.txt'.format(filename), modo)
-    file.write('{}'.format(content))
-    file.close()
 
 
 def getPredictedIndexes(data, data_mean, index, modo='greater than'):
@@ -91,7 +98,11 @@ def getResults(actual_indexes, predicted_indexes):
     n_predicted = torch.sum(predicted_indexes).item()
     n_actual = torch.sum(actual_indexes).item()
 
-    writeTXTfile('data_analysis', '\nMatches: {}\nPredicted: {}\nActual: {}\n'.format(n_matches, n_predicted, n_actual), 'a')
+    writeTXTfile(
+        'data_analysis',
+        '\nMatches: {}\nPredicted: {}\nActual: {}\n'.format(n_matches, n_predicted, n_actual),
+        'a'
+    )
 
     if n_predicted != 0:
         predicted_actual = n_predicted / n_actual
@@ -99,9 +110,24 @@ def getResults(actual_indexes, predicted_indexes):
         matches_actual = n_matches / n_actual
 
         # writeTXTfile('data_analysis', '\nNumber of matches: {:3}'.format(n_matches), 'a')
-        writeTXTfile('data_analysis', '\n% of n_predicted / n_actual: {:.2f}'.format(predicted_actual), 'a')
-        writeTXTfile('data_analysis', '\n% of n_matches / n_predicted: {:.2f}'.format(matches_predicted), 'a')
-        writeTXTfile('data_analysis', '\n% of n_matches / n_actual: {:.2f}\n\n'.format(matches_actual), 'a')
+
+        writeTXTfile(
+            'data_analysis',
+            '\n% of n_predicted / n_actual: {:.2f}'.format(predicted_actual),
+            'a'
+        )
+
+        writeTXTfile(
+            'data_analysis',
+            '\n% of n_matches / n_predicted: {:.2f}'.format(matches_predicted),
+            'a'
+        )
+
+        writeTXTfile(
+            'data_analysis',
+            '\n% of n_matches / n_actual: {:.2f}\n\n'.format(matches_actual),
+            'a'
+        )
     return
 
 
@@ -128,7 +154,6 @@ def main():
     exif_data_permuted = exif_data[:, desired_order]  # get the desired order and permute columns
 
     checkImageData(exif_data_permuted)
-
     return
 
 
