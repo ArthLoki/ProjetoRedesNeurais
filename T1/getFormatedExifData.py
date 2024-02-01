@@ -6,7 +6,7 @@ from printListData import printListDataContent, getIndex
 
 from contertString2number import convertDinamicallyData
 
-from readFiles import writeCSV, openTXT, moveFile
+from readFiles import writeCSV, openTXT, moveFile, writeTXTfile
 
 # from getIndexesFunc import getSpecificIndexes, getSpecificIndexesFromContent, getMultSpecificIndexesFromContent
 # from getIndexesFunc import getDateIndexesHeader, getDateIndexesContent, getOffsetTimeIndexes, getDivDataIndexes
@@ -130,6 +130,8 @@ def generateExifDataset():
         offsetTimeIndexes = getPartiallyNumericIndexesFromContent(content, 0, 1)
         divDataIndexes = getPartiallyNumericIndexesFromContent(content, 1, 0)
         str_data_indexes = findStrIndexes(content)
+        writeTXTfile('str_data_indexes', 'File {} ({}): '.format(filename, i), 'a')
+        writeTXTfile('str_data_indexes', '{}\n'.format(str_data_indexes), 'a')
         # print('Str indexes from line {}: {}'.format(i, str_data_indexes))
 
         content = convertDinamicallyData(
