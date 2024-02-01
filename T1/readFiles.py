@@ -27,6 +27,7 @@ def writeTXTfile(filename, content, modo):
     file = open('{}.txt'.format(filename), modo)
     file.write('{}'.format(content))
     file.close()
+    print(' {}.txt saved'.format(filename))
     return
 
 
