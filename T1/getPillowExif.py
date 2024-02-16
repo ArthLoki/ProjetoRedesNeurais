@@ -13,7 +13,7 @@ def getPillowExif(filename):
     return exif
 
 
-def generatePillowExifList():
+def generatePillowExifDict():
     exif_dict = {}
 
     for filename in filenames:
@@ -52,6 +52,6 @@ def getPillowExifTable(filename):
 
 
 if __name__ == '__main__':
-    exif_list = generatePillowExifList()
+    exif_list = generatePillowExifDict()
     print(exif_list)
     # getPillowExifTensor()
