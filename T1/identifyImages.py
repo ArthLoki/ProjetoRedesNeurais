@@ -16,9 +16,9 @@ from printListData import printListDataContent
 from readFiles import writeTXTfile, moveFile
 
 
-def importCSVData():
+def importCSVData(filename):
     csv_data_numpy = np.loadtxt(
-        csv_path+'/'+csv_filename1,
+        csv_path+'/'+filename,
         dtype=np.float32,
         delimiter=';',
         skiprows=1
@@ -131,12 +131,14 @@ def getResults(actual_indexes, predicted_indexes):
     return
 
 
-def main():
+def generateStatistics(csv_filename):
     # Generate csv file from exif data/raw data. it still needs to be changed later
     # generateExifDataset()
+    # or
+    # generatePillowExifCSV(csv_filename)
 
     # Import csv data to a pytorch tensor
-    exif_data = importCSVData()
+    exif_data = importCSVData(csv_filename)
 
     # Before the permutation of the columns, we need to
     # check if the tensor is contiguous and turn it contiguous if it's not
@@ -154,6 +156,12 @@ def main():
     exif_data_permuted = exif_data[:, desired_order]  # get the desired order and permute columns
 
     checkImageData(exif_data_permuted)
+    return
+
+
+def main():
+    filename = 'pillow_exif_csv.csv'
+    generateStatistics(filename)
     return
 
 

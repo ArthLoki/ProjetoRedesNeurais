@@ -13,13 +13,17 @@ def openTXT(path, filename):
 
 
 def writeCSV(content, modo, filename, path):
-    file = open(path+'/'+filename, modo)
-    if type(content) == list:
-        file.write(str(content[0]))
-        for c in content[1:]:
-            file.write(f';{str(c)}')
-        file.write('\n')
-    file.close()
+
+    try:
+        file = open(path+'/'+filename, modo)
+        if type(content) == list:
+            file.write(str(content[0]))
+            for c in content[1:]:
+                file.write(f';{str(c)}')
+            file.write('\n')
+        file.close()
+    except Exception as e:
+        print(e)
     return
 
 
