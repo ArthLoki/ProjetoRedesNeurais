@@ -1,15 +1,13 @@
 from PIL import Image
 from PIL.ExifTags import TAGS
 
-import torch
-
 from readFiles import writeCSV
 
-from globalVariables import filenames, data_path, csv_path
+from globalVariables import filenames, image_path, csv_path
 
 
 def getPillowExif(filename):
-    image = Image.open('{}/{}'.format(data_path, filename))
+    image = Image.open('{}/{}'.format(image_path, filename))
     exif = image.getexif()
     image.close()
     return exif

@@ -11,7 +11,7 @@ import os
 
 from getFormatedExifData import generateExifDataset, getHeaderList
 from getIndexesFunc import getSpecificIndexes, findStrIndexes
-from globalVariables import base_path, data_path, csv_path, csv_filename1, filenames
+from globalVariables import base_path, image_path, csv_path, csv_filename1, filenames
 from printListData import printListDataContent
 from readFiles import writeTXTfile, moveFile
 
@@ -160,7 +160,7 @@ def generateStatistics(csv_filename):
 
 
 def main():
-    filename = 'pillow_exif_csv.csv'
+    filename = 'exif/Pillow/pillow_exif_csv.csv'
     generateStatistics(filename)
     return
 
