@@ -1,7 +1,7 @@
 import shutil
 import os
 
-from Auxiliary.globalVariables import current_path
+from globalVariables import current_path
 
 
 def openTXT(path, filename):

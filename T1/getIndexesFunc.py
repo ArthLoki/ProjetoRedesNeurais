@@ -1,13 +1,13 @@
 # from readFiles import openTXT
 
-from globalVariables import base_path, image_path, exif_path, csv_path
+from globalVariables import base_path, data_path, exif_path, csv_path
 from globalVariables import filenames, csv_filename1, csv_filename2
 from globalVariables import alphabet
 
 
 # Function to get indexes according to input given
 def getSpecificIndexes(input, header):
-    # file = openTXT(image_path, filenames[0])  # gets header from the first exif file
+    # file = openTXT(data_path, filenames[0])  # gets header from the first exif file
     # header = createContentList(file, 0)
 
     indexes = []

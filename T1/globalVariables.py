@@ -4,17 +4,17 @@ import string
 
 # Global variables
 # 1 - Path
-global base_path, image_path, csv_path, exif_path, current_path
+global base_path, data_path, csv_path, exif_path, current_path
 base_path = get_base_path()
-image_path = f'{base_path}/Images'
-exif_path = f'{image_path}/exif_txt'
+data_path = f'{base_path}/Images/T1'
+exif_path = f'{data_path}/exif_txt'
 csv_path = f'{base_path}/T1'
 
 current_path = os.getcwd().replace('\\', '/')
 
 # 2 - Files
 global filenames, csv_filename1, csv_filename2
-filenames = [name for name in os.listdir(image_path) if os.path.splitext(name)[-1] == '.jpg']
+filenames = [name for name in os.listdir(data_path) if os.path.splitext(name)[-1] == '.jpg']
 csv_filename1 = 'output.csv'
 csv_filename2 = 'original_dataset.csv'
 

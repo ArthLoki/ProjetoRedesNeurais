@@ -2,7 +2,7 @@ import string
 import os
 import csv
 
-# from printListData import printListDataContent, getIndex
+from printListData import printListDataContent, getIndex
 
 from contertString2number import convertDinamicallyData
 
@@ -12,14 +12,14 @@ from readFiles import writeCSV, openTXT, moveFile, writeTXTfile
 # from getIndexesFunc import getDateIndexesHeader, getDateIndexesContent, getOffsetTimeIndexes, getDivDataIndexes
 from getIndexesFunc import getPartiallyNumericIndexesFromContent, findIndexFilePath, findStrIndexes
 
-from globalVariables import base_path, image_path, exif_path, csv_path, current_path
+from globalVariables import base_path, data_path, exif_path, csv_path, current_path
 from globalVariables import filenames, csv_filename1, csv_filename2
 from globalVariables import alphabet
 
 
 # According to escolha_tratamento, changes data
 def processingData(content, escolha_tratamento):
-    file = openTXT(image_path, filenames[0])  # gets header from the first exif file
+    file = openTXT(data_path, filenames[0])  # gets header from the first exif file
     header = createContentList(file, 0)
 
     filePathIndex = findIndexFilePath(header)
@@ -56,13 +56,13 @@ def getOgColumnData():
 
 # Gets the list of labels in header
 def getHeaderList():
-    file = openTXT(image_path, filenames[0])  # gets header from the first exif file
+    file = openTXT(data_path, filenames[0])  # gets header from the first exif file
     header = createContentList(file, 0)
     header = processingData(header, 1)
     file.close()
     return header
 
-    # csv_exif = csv.reader(open(image_path), delimiter=";")
+    # csv_exif = csv.reader(open(data_path), delimiter=";")
     # col_list = next(csv_exif)
     # return col_list
 
@@ -95,7 +95,7 @@ def createContentList(file, content_type):
 
 
 def getContentList(filename):
-    file = openTXT(image_path, filename)
+    file = openTXT(data_path, filename)
 
     header = getHeaderList()
 
