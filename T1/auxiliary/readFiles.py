@@ -1,8 +1,5 @@
 import shutil
 
-from ProjetoRedesNeurais.T1.auxiliary.globalVariables import current_path
-from ProjetoRedesNeurais.T1.auxiliary.globalVariables import image_path
-
 
 def openTXT(path, filename):
     file_path = f'{path}/exif_txt/{filename}.txt'
@@ -13,7 +10,7 @@ def openTXT(path, filename):
 
 
 def openImageFile(filename):
-    return open(image_path + '\\' + filename, 'rb')
+    return open(image_path + '/' + filename, 'rb')
 
 
 def writeCSV(content, modo, filename, path):

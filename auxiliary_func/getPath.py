@@ -12,3 +12,14 @@ def get_base_path():
     for i in range(1, len(l_path)-1):
         base_path += f'/{l_path[i]}'
     return base_path
+
+
+def editPath(ogpath, backspace):
+
+    if backspace > 0:
+        dirs = ogpath.split('/')
+        edited_path = f'{dirs[0]}'
+        for d in dirs[1:-backspace]:
+            edited_path += f'\\{d}'
+        return edited_path
+    return ogpath

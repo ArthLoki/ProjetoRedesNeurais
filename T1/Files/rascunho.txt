@@ -25,7 +25,7 @@ import os
 
 from getFormatedExifData import generateExifDataset, getSpecificIndexes
 # from getFormatedExifData import getSpecificIndexesFromContent, getMultSpecificIndexesFromContent
-from getFormatedExifData import base_path, image_path, csv_path, csv_filename, filenames
+from getFormatedExifData import base_path, csv_filename
 from getFormatedExifData import strIndexes, dateIndexes, all_content
 
 from contertString2number import str2num, date2num

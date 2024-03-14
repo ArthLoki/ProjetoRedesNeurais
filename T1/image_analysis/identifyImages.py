@@ -9,8 +9,12 @@ import numpy as np
 import torch
 
 from ProjetoRedesNeurais.T1.exif.getFormatedPilotExifData import getHeaderList
-from ProjetoRedesNeurais.T1.auxiliary.globalVariables import csv_path
+from ProjetoRedesNeurais.T1.auxiliary.globalVariables import base_path, current_path
 from ProjetoRedesNeurais.T1.auxiliary.readFiles import writeTXTfile
+
+from ProjetoRedesNeurais.auxiliary_func.getPath import editPath
+
+csv_path = f'{editPath(current_path, 1)}'.replace("\\", "/")
 
 
 def importCSVData(filename):

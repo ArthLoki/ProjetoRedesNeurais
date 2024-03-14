@@ -8,16 +8,19 @@ from ProjetoRedesNeurais.T1.auxiliary.contertString2number import convertDinamic
 
 from ProjetoRedesNeurais.T1.auxiliary.readFiles import writeCSV, openTXT, moveFile, writeTXTfile
 
-# from ProjetoRedesNeurais.T1.auxiliary.getIndexesFunc import getSpecificIndexes, getSpecificIndexesFromContent
-# from ProjetoRedesNeurais.T1.auxiliary.getIndexesFunc import getMultSpecificIndexesFromContent
-# from ProjetoRedesNeurais.T1.auxiliary.getIndexesFunc import getDateIndexesHeader, getDateIndexesContent
-# from ProjetoRedesNeurais.T1.auxiliary.getIndexesFunc import getOffsetTimeIndexes, getDivDataIndexes
 from ProjetoRedesNeurais.T1.auxiliary.getIndexesFunc import getPartiallyNumericIndexesFromContent, findIndexFilePath
 from ProjetoRedesNeurais.T1.auxiliary.getIndexesFunc import findStrIndexes
 
-from ProjetoRedesNeurais.T1.auxiliary.globalVariables import base_path, image_path, exif_path, csv_path, current_path
-from ProjetoRedesNeurais.T1.auxiliary.globalVariables import filenames, csv_filename1, csv_filename2
+from ProjetoRedesNeurais.T1.auxiliary.globalVariables import base_path, current_path
+from ProjetoRedesNeurais.T1.auxiliary.globalVariables import csv_filename1, csv_filename2
 from ProjetoRedesNeurais.T1.auxiliary.globalVariables import alphabet
+
+from ProjetoRedesNeurais.auxiliary_func.getPath import editPath
+
+image_path = f'{editPath(current_path, 2)}/Images'.replace("\\", "/")
+filenames = [name for name in os.listdir(image_path) if os.path.splitext(name)[-1] == '.jpg']
+
+exif_path = f'{image_path}/exif_txt'
 
 
 # According to escolha_tratamento, changes data
