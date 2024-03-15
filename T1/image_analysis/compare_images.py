@@ -4,6 +4,7 @@ from ProjetoRedesNeurais.T1.auxiliary.globalVariables import base_path, current_
 from ProjetoRedesNeurais.T1.exif.getPillowExif import generatePillowExifDict
 
 image_path = f'{editPath(current_path, 2)}/Images'.replace("\\", "/")
+print(image_path)
 
 og_images_filenames = [name for name in os.listdir(image_path)
                        if os.path.splitext(name)[-1] == '.jpg' and 'og_' in name]

@@ -8,7 +8,7 @@ from ProjetoRedesNeurais.T1.auxiliary.globalVariables import base_path, current_
 
 from ProjetoRedesNeurais.auxiliary_func.getPath import editPath
 
-image_path = f'{editPath(current_path, 1)}/Images'.replace('\\', '/')
+image_path = f'{editPath(current_path, 2)}/Images'.replace('\\', '/')
 filenames = [name for name in os.listdir(image_path) if os.path.splitext(name)[-1] == '.jpg']
 
 
@@ -29,13 +29,16 @@ def listAllExifTags(img):
 def getExif(filename, tag):
     img = openImage(filename)
     if checkExifExistence(img):
-        return img.tag
+        return img.get(tag)
     return None
 
 
 def main():
     img = openImage(filenames[0])
-    print(listAllExifTags(img))
+
+    print(type(img))
+    print(checkExifExistence(img))
+    # print(listAllExifTags(img))
 
     return
 

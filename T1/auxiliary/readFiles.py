@@ -1,4 +1,5 @@
 import shutil
+from ProjetoRedesNeurais.T1.auxiliary.globalVariables import current_path
 
 
 def openTXT(path, filename):
@@ -9,8 +10,8 @@ def openTXT(path, filename):
     return file
 
 
-def openImageFile(filename):
-    return open(image_path + '/' + filename, 'rb')
+def openImageFile(path, filename):
+    return open(path + '/' + filename, 'rb')
 
 
 def writeCSV(content, modo, filename, path):
