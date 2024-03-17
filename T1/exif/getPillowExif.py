@@ -1,9 +1,18 @@
+import os
+
 from PIL import Image
 from PIL.ExifTags import TAGS
 
-from readFiles import writeCSV
+from ProjetoRedesNeurais.T1.auxiliary.readFiles import writeCSV
 
-from globalVariables import filenames, image_path, csv_path
+from ProjetoRedesNeurais.auxiliary_func.getPath import editPath
+
+from ProjetoRedesNeurais.T1.auxiliary.globalVariables import base_path, current_path
+
+image_path = f'{editPath(current_path)}/Images'.replace('\\', '/')
+filenames = [name for name in os.listdir(image_path) if os.path.splitext(name)[-1] == '.jpg']
+
+csv_path = f'{editPath(current_path)}'.replace("\\", "/")
 
 
 def getPillowExif(filename):
@@ -35,16 +44,21 @@ def getPillowExifTable(filename):
 
 
 def generatePillowExifCSV(original_filename, converted_filename):
+    # {filename: {attr1: value1, attr2: value2, ...}}
+
     exif_dict = generatePillowExifDict()
 
     img_name = list(exif_dict.keys())
-    header = list((exif_dict.get(img_name[0])).keys())
+
+    header = ['Filename']
+    header.extend(list((exif_dict.get(img_name[0])).keys()))
 
     writeCSV(header, 'w', original_filename, csv_path)
     writeCSV(header, 'w', converted_filename, csv_path)
 
     for name in img_name:
-        content = list((exif_dict.get(name)).values())
+        content = [name]
+        content.extend(list((exif_dict.get(name)).values()))
         writeCSV(content, 'a', original_filename, csv_path)
 
 
@@ -56,4 +70,4 @@ if __name__ == '__main__':
     exif_list = generatePillowExifDict()
     # print(exif_list)
 
-    generatePillowExifCSV('original_pillow_exif_dataset.csv', 'output_pillow_exif_dataset.csv')
+    generatePillowExifCSV('../original_pillow_exif_dataset.csv', '../output_pillow_exif_dataset.csv')

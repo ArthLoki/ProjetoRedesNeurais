@@ -7,13 +7,14 @@ from ProjetoRedesNeurais.auxiliary_func.getTimer import timer_data
 
 import numpy as np
 import torch
-import os
 
-from getFormatedExifData import generateExifDataset, getHeaderList
-from getIndexesFunc import getSpecificIndexes, findStrIndexes
-from globalVariables import base_path, image_path, csv_path, csv_filename1, filenames
-from printListData import printListDataContent
-from readFiles import writeTXTfile, moveFile
+from ProjetoRedesNeurais.T1.exif.getFormatedPilotExifData import getHeaderList
+from ProjetoRedesNeurais.T1.auxiliary.globalVariables import base_path, current_path
+from ProjetoRedesNeurais.T1.auxiliary.readFiles import writeTXTfile
+
+from ProjetoRedesNeurais.auxiliary_func.getPath import editPath
+
+csv_path = f'{editPath(current_path)}'.replace("\\", "/")
 
 
 def importCSVData(filename):
@@ -160,7 +161,7 @@ def generateStatistics(csv_filename):
 
 
 def main():
-    filename = 'exif/Pillow/pillow_exif_csv.csv'
+    filename = '../output_pillow_exif_dataset.csv'
     generateStatistics(filename)
     return
 
