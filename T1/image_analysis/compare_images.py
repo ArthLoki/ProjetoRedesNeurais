@@ -2,14 +2,15 @@ import os
 from ProjetoRedesNeurais.auxiliary_func.getPath import editPath
 from ProjetoRedesNeurais.T1.auxiliary.globalVariables import base_path, current_path
 from ProjetoRedesNeurais.T1.exif.getPillowExif import generatePillowExifDict
+from ProjetoRedesNeurais.T1.exif.getExifExif import getExifDict
 
 image_path = f'{editPath(current_path)}/Images'.replace("\\", "/")
-print(image_path)
+# print(image_path)
 
 og_images_filenames = [name for name in os.listdir(image_path)
-                       if os.path.splitext(name)[-1] == '.jpg' and 'og_' in name]
+                       if os.path.splitext(name)[-1] in ['.jpg', '.jpeg'] and 'og_' in name]
 nog_images_filenames = [name for name in os.listdir(image_path)
-                        if os.path.splitext(name)[-1] == '.jpg' and 'og_' not in name]
+                        if os.path.splitext(name)[-1] in ['.jpg', '.jpeg'] and 'og_' not in name]
 
 
 def getPairsOfImagesAndExif(dict_exif):
@@ -31,9 +32,11 @@ def getPairsOfImagesAndExif(dict_exif):
 
 
 def main():
-    dict_pillow_exif = generatePillowExifDict()
-    pairs = getPairsOfImagesAndExif(dict_pillow_exif)
-    print(pairs[0])
+    # dict_pillow_exif = generatePillowExifDict()
+    dict_exif = getExifDict()
+    pairs = getPairsOfImagesAndExif(dict_exif)
+    # print(type(pairs))
+    # print(pairs[0])
     return
 
 
