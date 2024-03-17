@@ -1,4 +1,4 @@
-from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path, get_current_path, editPath
+from ProjetoRedesNeurais.auxiliary_func.getPath import get_base_path, get_current_path
 import os
 import string
 

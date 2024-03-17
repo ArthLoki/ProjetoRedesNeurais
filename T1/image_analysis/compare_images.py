@@ -3,7 +3,7 @@ from ProjetoRedesNeurais.auxiliary_func.getPath import editPath
 from ProjetoRedesNeurais.T1.auxiliary.globalVariables import base_path, current_path
 from ProjetoRedesNeurais.T1.exif.getPillowExif import generatePillowExifDict
 
-image_path = f'{editPath(current_path, 2)}/Images'.replace("\\", "/")
+image_path = f'{editPath(current_path)}/Images'.replace("\\", "/")
 print(image_path)
 
 og_images_filenames = [name for name in os.listdir(image_path)

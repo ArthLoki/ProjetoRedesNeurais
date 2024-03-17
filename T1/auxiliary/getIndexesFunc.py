@@ -8,7 +8,7 @@ from ProjetoRedesNeurais.T1.auxiliary.globalVariables import alphabet
 
 from ProjetoRedesNeurais.auxiliary_func.getPath import editPath
 
-image_path = f'{editPath(current_path, 1)}/Images'.replace('\\', '/')
+image_path = f'{editPath(current_path)}/Images'.replace('\\', '/')
 filenames = [name for name in os.listdir(image_path) if os.path.splitext(name)[-1] == '.jpg']
 exif_path = f'{image_path}/exif_txt'
 

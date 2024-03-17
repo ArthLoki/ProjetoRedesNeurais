@@ -10,7 +10,7 @@ from ProjetoRedesNeurais.T1.auxiliary.globalVariables import base_path, current_
 
 from ProjetoRedesNeurais.auxiliary_func.getPath import editPath
 
-image_path = f'{editPath(current_path, 2)}/Images'.replace('\\', '/')
+image_path = f'{editPath(current_path)}/Images'.replace('\\', '/')
 filenames = [name for name in os.listdir(image_path) if os.path.splitext(name)[-1] == '.jpg']
 
 img_file = openImageFile(image_path, filenames[0])

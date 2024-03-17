@@ -14,7 +14,7 @@ from ProjetoRedesNeurais.T1.auxiliary.readFiles import writeTXTfile
 
 from ProjetoRedesNeurais.auxiliary_func.getPath import editPath
 
-csv_path = f'{editPath(current_path, 1)}'.replace("\\", "/")
+csv_path = f'{editPath(current_path)}'.replace("\\", "/")
 
 
 def importCSVData(filename):
