@@ -1,3 +1,4 @@
+import os
 from ProjetoRedesNeurais.LabGPSI.auxiliary.readFiles import writeCSV
 
 from ProjetoRedesNeurais.LabGPSI.auxiliary.globalVariables import current_path, image_path
@@ -44,17 +45,22 @@ def generateExifDataset():
         filenames = list(exif_data.keys())
         header = get_header_list(filenames[0], exif_data)
 
-        writeCSV(header, 'w', csv_filename2, image_path)
+        # print(header)
+        writeCSV(header, 'w', csv_filename2, current_path)
 
         # Write the content in the CSV
         for filename in filenames:
             content = get_content_list(filename, exif_data)
-            writeCSV(content, 'a', csv_filename2, image_path)
-        print('csv generated')
-        return
+            # print(content)
+            writeCSV(content, 'a', csv_filename2, current_path)
+
+        if csv_filename2 in os.listdir(current_path):
+            print('csv generated')
+        else:
+            print('csv generation failed')
     except Exception as e:
         print('Error in generateExifDataset: ', e)
-        return
+    return
 
 
 # Run if you want to test csv generation
