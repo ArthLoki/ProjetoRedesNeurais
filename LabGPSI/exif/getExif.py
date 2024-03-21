@@ -2,11 +2,9 @@ from exif import Image
 
 import os
 
+from ProjetoRedesNeurais.LabGPSI.auxiliary.globalVariables import image_path
 
-from ProjetoRedesNeurais.LabGPSI.auxiliary.globalVariables import current_path
-from ProjetoRedesNeurais.LabGPSI.auxiliary.getPath import editPath
 
-image_path = f'{editPath(current_path)}/Images'.replace('\\', '/')
 filenames = [name for name in os.listdir(image_path) if os.path.splitext(name)[-1] in ['.jpg', '.jpeg']]
 
 

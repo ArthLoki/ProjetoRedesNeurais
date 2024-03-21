@@ -18,14 +18,14 @@ def writeCSV(content, modo, filename, path):
 
     try:
         file = open(path+'/'+filename, modo)
-        if type(content) == list:
+        if type(content) == list and len(content) > 0:
             file.write(str(content[0]))
             for c in content[1:]:
                 file.write(f';{str(c)}')
             file.write('\n')
         file.close()
     except Exception as e:
-        print(e)
+        print('Error in writing csv: ', e)
     return
 
 
