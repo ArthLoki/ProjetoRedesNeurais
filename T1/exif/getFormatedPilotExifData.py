@@ -1,6 +1,4 @@
-import string
 import os
-import csv
 
 from ProjetoRedesNeurais.T1.auxiliary.printListData import printListDataContent, getIndex
 

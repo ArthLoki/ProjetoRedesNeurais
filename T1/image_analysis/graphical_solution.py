@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 
+from time import sleep
+
 import os
 import numpy as np
 
@@ -38,6 +40,8 @@ def get_dict_tags4statistcs():
                     og_data = value_items[1][0]
                     nog_data = value_items[1][1]
 
+                    # print('{}: {}\n{}: {}\n'.format(key, og_data, key, nog_data))
+
                     # if og_dict_tags.get(key) is None:
                     #     og_dict_tags[key] = [og_data]
                     # else:
@@ -53,29 +57,56 @@ def get_dict_tags4statistcs():
     return og_dict_tags, nog_dict_tags
 
 
+def replaceNoneValue(points):
+    for i, point in enumerate(points):
+        if point is None:
+            if i < len(points)-1:
+                if type(points[i + 1]) == str or type(points[i - 1]) == str:
+                    points[i] = 'sem valor'
+                elif type(points[i + 1]) in [int, float] or type(points[i - 1]) in [int, float]:
+                    points[i] = 0
+
+            elif i == len(points)-1:
+                if type(points[i - 1]) == str:
+                    points[i] = 'sem valor'
+                elif type(points[i - 1]) in [int, float]:
+                    points[i] = 0
+    return points
+
+
 def generateStatistics():
-    og_dict_tags, nog_dict_tags = get_dict_tags4statistcs()
 
-    for key, og_value in og_dict_tags.items():
-        if og_value is None:
-            og_value = 0
+    try:
+        og_dict_tags, nog_dict_tags = get_dict_tags4statistcs()
 
-        nog_value = nog_dict_tags.get(key)
-        if nog_value is None:
-            nog_value = 0
+        for key, og_value in og_dict_tags.items():
+            if og_value is None:
+                og_value = []
 
-        ogpoints = np.array(og_value)
-        nogpoints = np.array(nog_value)
+            nog_value = nog_dict_tags.get(key)
+            if nog_value is None:
+                nog_value = []
 
-        if nogpoints is None:
-            nogpoints = np.array([])
+            # ogpoints = np.array(og_value)
+            # nogpoints = np.array(nog_value)
 
-        plt.plot(ogpoints, color='blue')
-        plt.plot(nogpoints, color='orange', linestyle='dotted')
+            ogpoints = replaceNoneValue(np.array(og_value))
+            nogpoints = replaceNoneValue(np.array(nog_value))
 
-        plt.title(key)
+            # if nogpoints is None:
+            #     nogpoints = np.array([])
 
-        plt.show()
+            # print('{}: {}\n{}:{}\n'.format(key, ogpoints, key, nogpoints))
+
+            plt.plot(ogpoints, color='blue')
+            plt.plot(nogpoints, color='orange', linestyle='dotted')
+
+            plt.title(key)
+
+            plt.show()
+            sleep(1.2)
+    except Exception as e:
+        print('Error generating statistics: {}'.format(e))
     return
 
 
