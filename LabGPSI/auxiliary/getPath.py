@@ -14,17 +14,13 @@ def get_base_path():
     return base_path
 
 
-def editPath(ogpath, desktop=True):
+def editPath(ogpath):
     backspace = get_backspace(ogpath, 'ProjetoRedesNeurais')
     if backspace > 0:
         dirs = ogpath.split('/')
         edited_path = f'{dirs[0]}'
-        if desktop:
-            for d in dirs[1:-backspace]:
-                edited_path += f'/{d}'
-        else:
-            for d in dirs[1:-backspace+1]:
-                edited_path += f'/{d}'
+        for d in dirs[1:-backspace]:
+            edited_path += f'/{d}'
         return edited_path
     return ogpath
 
