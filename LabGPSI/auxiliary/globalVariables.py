@@ -1,4 +1,4 @@
-from ProjetoRedesNeurais.LabGPSI.auxiliary.getPath import get_base_path
+from ProjetoRedesNeurais.LabGPSI.auxiliary.getPath import get_base_path, editPath
 import os
 import string
 
@@ -7,6 +7,7 @@ import string
 global base_path, current_path
 current_path = os.getcwd().replace('\\', '/')
 base_path = get_base_path()
+image_path = f'{editPath(current_path)}/Images'.replace('\\', '/')
 
 # 2 - Files
 global filenames, csv_filename1, csv_filename2

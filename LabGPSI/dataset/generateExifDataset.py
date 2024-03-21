@@ -1,6 +1,6 @@
 from ProjetoRedesNeurais.LabGPSI.auxiliary.readFiles import writeCSV
 
-from ProjetoRedesNeurais.LabGPSI.auxiliary.globalVariables import current_path
+from ProjetoRedesNeurais.LabGPSI.auxiliary.globalVariables import current_path, image_path
 from ProjetoRedesNeurais.LabGPSI.auxiliary.globalVariables import csv_filename2
 
 from ProjetoRedesNeurais.LabGPSI.exif.getExif import getExifDict
@@ -16,6 +16,7 @@ def get_header_list(filename, exif_data):
         return exif_label
     except Exception as e:
         print('Error in get_header_list: ', e)
+        return
 
 
 # Gets the list of exif's data of each image
@@ -31,6 +32,7 @@ def get_content_list(filename, exif_data):
         return content_list
     except Exception as e:
         print('Error on get_content_list: ', e)
+        return
 
 
 def generateExifDataset():
@@ -42,16 +44,17 @@ def generateExifDataset():
         filenames = list(exif_data.keys())
         header = get_header_list(filenames[0], exif_data)
 
-        writeCSV(header, 'w', csv_filename2, current_path)
+        writeCSV(header, 'w', csv_filename2, image_path)
 
         # Write the content in the CSV
         for filename in filenames:
             content = get_content_list(filename, exif_data)
-            writeCSV(content, 'a', csv_filename2, current_path)
+            writeCSV(content, 'a', csv_filename2, image_path)
         print('csv generated')
         return
     except Exception as e:
         print('Error in generateExifDataset: ', e)
+        return
 
 
 # Run if you want to test csv generation
