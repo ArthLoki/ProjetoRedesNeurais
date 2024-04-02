@@ -2,11 +2,10 @@ from exif import Image
 
 import os
 
-from ProjetoRedesNeurais.LabGPSI.auxiliary.globalVariables import image_path
+from ProjetoRedesNeurais.LabGPSI.auxiliary.globalVariables import image_path, current_path
 
-
+lab_path = current_path.split('/')[0] + '/' + '/'.join(current_path.split('/')[1:-1])
 filenames = [name for name in os.listdir(image_path) if os.path.splitext(name)[-1] in ['.jpg', '.jpeg']]
-
 
 def openImage(filename):
     try:
